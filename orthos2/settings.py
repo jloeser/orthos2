@@ -24,7 +24,7 @@ from django_auth_ldap.config import GroupOfNamesType, LDAPSearch
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 if os.getenv('ORTHOS_DEV'):
-    BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 else:
     BASE_DIR = os.path.abspath('/var/lib/orthos2')
 
@@ -89,30 +89,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'orthos2.wsgi.application'
 
-if os.getenv('ORTHOS_DEV'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'database' if not os.getenv('ORTHOS_DEV') else '', 'db.sqlite3'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'database', 'db.sqlite3'),
-        }
-    }
+}
 
 RUN_AS_USER = 'orthos'
 CUR_USER = getpwuid( os.getuid())[ 0 ]
-if os.getenv('ORTHOS_DEV'):
-    RUN_AS_USER = CUR_USER
-else:
-    if CUR_USER != RUN_AS_USER:
-        logging.error("You must run as user: {}, not as user: {}".
-                    format(RUN_AS_USER, CUR_USER))
-        exit(1)
+
+if not os.getenv('ORTHOS_DEV') and CUR_USER != RUN_AS_USER:
+    logging.error("You must run as user: {}, not as user: {}".
+                format(RUN_AS_USER, CUR_USER))
+    exit(1)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -217,7 +207,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'syslog',
-            'filename': '/var/log/orthos2/default.log',
+            'filename': os.path.join("/var/log/orthos2" if not os.getenv('ORTHOS_DEV') else BASE_DIR, 'default.log'),
         },
     },
     'loggers': {

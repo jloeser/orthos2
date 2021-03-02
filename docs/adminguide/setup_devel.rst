@@ -35,51 +35,62 @@ Installation/Setup (Devel system)
         $ pip install -r requirements-devel.txt
         Collecting django
         ...
-        $ cd orthos2/
-
-5. Dump Database Model:
+        
+5. Prepare environment variables (must be executed in the orthos2 folder which includes README.md):
     .. code-block::
 
+        $ export PYTHONPATH=$(pwd)
+        $ export ORTHOS_DEV=1
+
+6. Dump Database Model:
+    .. code-block::
+    
         cd /usr/lib/orthos2
         sudo -u orthos ./manage.py makemigrations data frontend taskmanager api
+        
+7. For development mode, orthos user is not necessary:
+    .. code-block::
+    
+        $ cd orthos2/
+        $ python bin/manage.py makemigrations data frontend taskmanager api
 
-6. Migrate (create) the database:
+8. Migrate (create) the database:
     .. code-block::
 
-         $ python manage.py migrate
-         Operations to perform:
+        $ python bin/manage.py migrate
+        Operations to perform:
                  Apply all migrations: admin, auth, authtoken, contenttypes, data, sessions, taskmanager
-         Running migrations:
+        Running migrations:
                  Applying ...
 
-7. Load initial data:
+9. Load initial data:
     .. code-block::
 
-        $ python manage.py loaddata data/fixtures/*.json
+        $ python bin/manage.py loaddata data/fixtures/*.json
         Installed 94 object(s) from 7 fixture(s)
-        $ python manage.py loaddata taskmanager/fixtures/*.json
+        $ python bin/manage.py loaddata taskmanager/fixtures/*.json
         Installed 2 object(s) from 1 fixture(s)
 
-8. Create a superuser (administrator) account:
-    .. code-block::
+10. Create a superuser (administrator) account:
+        .. code-block::
 
-        $ python manage.py createsuperuser
-        Username (leave blank to use '<your_login>'): admin
-        Email address: <your_login>@domain.de
-        Password: ********
-        Password (again): ********
-        Superuser created successfully.
+            $ python bin/manage.py createsuperuser
+            Username (leave blank to use '<your_login>'): admin
+            Email address: <your_login>@domain.de
+            Password: ********
+            Password (again): ********
+            Superuser created successfully.
 
-9. Run the test server:
-    .. code-block::
+11. Run the test server:
+        .. code-block::
 
-        $ python manage.py runserver localhost:8000
-        Performing system checks...
-        System check identified no issues (0 silenced).
-        November 23, 2017 - 16:25:35
-        Django version 1.11.7, using settings 'orthos2.settings'
-        Starting development server at http://localhost:8000/
-        Quit the server with CONTROL-C.
+            $ python bin/manage.py runserver localhost:8000
+            Performing system checks...
+            System check identified no issues (0 silenced).
+            November 23, 2017 - 16:25:35
+            Django version 1.11.7, using settings 'orthos2.settings'
+            Starting development server at http://localhost:8000/
+            Quit the server with CONTROL-C.
 
-10. Open your browser and go to `http://localhost:8000 <http://localhost:8000>`_ or
+12. Open your browser and go to `http://localhost:8000 <http://localhost:8000>`_ or
    `http://localhost:8000/admin <http://localhost:8000/admin>`_ (use the superuser login here).
