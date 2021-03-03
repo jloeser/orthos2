@@ -37,7 +37,7 @@ Installation/Setup (Devel system)
         ...
         $ cd orthos2/
 
-4.1 Set environment variables for development:
+   Set environment variables for development:
     .. code-block::
 
         $ export PYTHONPATH=$(git rev-parse --show-toplevel)
