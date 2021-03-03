@@ -89,6 +89,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'orthos2.wsgi.application'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -99,9 +100,12 @@ DATABASES = {
 RUN_AS_USER = 'orthos'
 CUR_USER = getpwuid( os.getuid())[ 0 ]
 
-if not os.getenv('ORTHOS_DEV') and CUR_USER != RUN_AS_USER:
+if os.getenv('ORTHOS_DEV'):
+    RUN_AS_USER = CUR_USER
+
+if CUR_USER != RUN_AS_USER:
     logging.error("You must run as user: {}, not as user: {}".
-                format(RUN_AS_USER, CUR_USER))
+                 format(RUN_AS_USER, CUR_USER))
     exit(1)
 
 # Password validation
@@ -207,7 +211,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'syslog',
-            'filename': os.path.join("/var/log/orthos2" if not os.getenv('ORTHOS_DEV') else BASE_DIR, 'default.log'),
+            'filename': os.path.join('/var/log/orthos2' if not os.getenv('ORTHOS_DEV') else BASE_DIR, 'default.log'),
         },
     },
     'loggers': {
